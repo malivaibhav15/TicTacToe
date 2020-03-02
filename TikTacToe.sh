@@ -19,10 +19,21 @@ function assigningLetter()
 		player2="X"
 	else
 		player1="X"
-      player2="O"
+		player2="O"
 	fi
 	echo "Player1 assigned="$player1
 	echo "Player2 assigned="$player2
 }
+function toss()
+{
+	toss=$((RANDOM%2))
+	if [[ $toss -eq 1 ]]
+	then
+		echo "Player1 won the toss and elected to play first"
+	else
+		echo "Player2 won the toss and elected to play first"
+	fi
+}
 displayBoard
 assigningLetter
+toss
