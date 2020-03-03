@@ -1,12 +1,12 @@
 #!/bin/bash -x
 size=3
-function displayBoard()
+function board()
 {
 	for (( rows=0;rows<$size;rows++ ))
 	do
 		for (( columns=0;columns<$size;columns++ ))
 		do
-			displayBoard[$rows,$columns]=""
+			board[$rows,$columns]=""
 		done
 	done
 }
@@ -34,6 +34,21 @@ function toss()
 		echo "Player2 won the toss and elected to play first"
 	fi
 }
-displayBoard
+function displayBoard()
+{
+	for ((rows=0;rows<$size;rows++ ))
+	do
+		echo "----------"
+		for (( columns=0;columns<$size;columns++ ))
+		do
+			echo -n "|" ${board[$rows,$columns]} " "
+		done
+		printf "|"
+		echo
+	done
+	echo "----------"
+}
+board
 assigningLetter
 toss
+displayBoard
