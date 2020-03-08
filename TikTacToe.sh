@@ -228,7 +228,7 @@ function checkWin()
 		fi
 	done
 }
-#FUCTION FOR CHECKING TURN AND CHECKING WIN
+#FUNCTION FOR CHECKING TURN AND CHECKING WIN
 function term()
 {
 	condition=2
