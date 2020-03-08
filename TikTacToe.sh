@@ -19,6 +19,21 @@ function resettingTheBoard()
 		done
 	done
 }
+#FUNCTION TO DISPLAY BOARD
+function displayBoard()
+{
+	for((index=0;index<$ROWS;index++))
+	do
+		echo "----------------"
+		for(( index1=0; index1<$COLUMNS; index1++))
+		do
+			echo -n "|" ${board[$ROWS,$COLUMNS]} "" "|"
+		done
+		echo
+	done
+	echo "----------------"
+}
+
 #FUNCTION FOR ASSIGNING THE LETTER
 function assignLetter()
 {
@@ -39,20 +54,6 @@ function whoPlayFirst()
 		condition=1
 		echo "$player won the toss and elected to play first"
 	fi
-}
-#FUNCTION TO DISPLAY BOARD
-function displayBoard()
-{
-	for((index=0;index<$ROWS;index++))
-	do
-		echo "----------------"
-		for(( index1=0; index1<$COLUMNS; index1++))
-		do
-			echo -n "|" ${board[$ROWS,$COLUMNS]} "" "|"
-		done
-		echo
-	done
-	echo "----------------"
 }
 #FUNCTION FOR DECIDING THE CELL NUMBER
 function choose()
@@ -227,6 +228,134 @@ function checkWin()
 			break
 		fi
 	done
+}
+ function winner()
+{
+	flag=0
+	for((index=0;index<3;index++))
+	do
+		if [[ ${board[$index,0]} == O && ${board[$index,1]} == O && ${board[$index,2]} == O ]]
+	then
+		flag=1
+		echo "-----Computer won-----"
+		break
+	elif [[ ${board[$k,1]} == O && ${board[$k,2]} == O && ${board[$k,0]} == O ]]
+	then
+		flag=1
+		echo "-----cpu won-----"
+		break
+	elif [[ ${board[$k,2]} == O && ${board[$k,0]} == O && ${board[$k,1]} == O ]]
+	then
+		flag=1
+		echo "-----cpu won-----"
+		break
+	elif [[ ${board[0,$k]} == O && ${board[1,$k]} == O && ${board[2,$k]} == O ]]
+	then
+		flag=1
+		echo "-----cpu won-----"
+		break
+	elif [[ ${board[1,$k]} == O && ${board[2,$k]} == O && ${board[0,$k]} == O ]]
+	then
+		flag=1
+		echo "-----cpu won-----"
+		break
+	elif [[ ${board[2,$k]} == O && ${board[0,$k]} == O && ${board[1,$k]} == O ]]
+	then
+		flag=1
+		echo "-----cpu won-----"
+		break
+	elif [[ ${board[0,0]} == O && ${board[1,1]} == O && ${board[2,2]} == O ]]
+	then
+		flag=1
+		echo "-----cpu won-----"
+		break
+	elif [[ ${board[0,0]} == O && ${board[2,2]} == O && ${board[1,1]} == O ]]
+	then
+		flag=1
+		echo "-----cpu won-----"
+		break
+	elif [[ ${board[2,2]} == O && ${board[1,1]} == O && ${board[0,0]} == O ]]
+	then
+		flag=1
+		echo "-----cpu won-----"
+      break
+	elif [[ ${board[2,0]} == O && ${board[1,1]} == O && ${board[0,2]} == O ]]
+   then
+      flag=1
+      echo "-----cpu won-----"
+      break
+	elif [[ ${board[0,2]} == O && ${board[1,1]} == O && ${board[2,0]} == O ]]
+   then
+      flag=1
+      echo "-----cpu won-----"
+      break
+	elif [[ ${board[2,0]} == O && ${board[0,2]} == O && ${board[1,1]} == O ]]
+   then
+      flag=1
+      echo "-----cpu won-----"
+      break
+	elif [[ ${board[$k,0]} == X && ${board[$k,1]} == X && ${board[$k,2]} == X ]]
+	then
+      flag=1
+		echo "-----User won-----"
+		break
+   elif [[ ${board[$k,1]} == X && ${board[$k,2]} == X && ${board[$k,0]} == X  ]]
+   then
+      flag=1
+      echo "-----User won-----"
+      break
+	elif [[ ${board[$k,2]} == X && ${board[$k,0]} == X && ${board[$k,1]} == X  ]]
+   then
+      flag=1
+      echo "------User won-----"
+      break
+	elif [[ ${board[0,$k]} == X && ${board[1,$k]} == X && ${board[2,$k]} == X  ]]
+   then
+		flag=1
+     echo "-----User won-----"
+      break
+	elif [[ ${board[1,$k]} == X && ${board[2,$k]} == X && ${board[0,$k]} == X  ]]
+   then
+      flag=1
+      echo "-----User won-----"
+      break
+	elif [[ ${board[2,$k]} == X && ${board[0,$k]} == X && ${board[1,$k]} == X  ]]
+   then
+      flag=1
+      echo "-----User won-----"
+      break
+	elif [[ ${board[0,0]} == X && ${board[1,1]} == X && ${board[2,2]} == X  ]]
+   then
+      flag=1
+      echo "-----User won-----"
+      break
+	elif [[ ${board[0,0]} == X && ${board[2,2]} == X && ${board[1,1]} == X  ]]
+   then
+      flag=1
+      echo "-----User won-----"
+      break
+	elif [[ ${board[2,2]} == X && ${board[1,1]} == X && ${board[0,0]} == X  ]]
+   then
+      flag=1
+      echo "-----User won-----"
+      break
+	elif [[ ${board[2,0]} == X && ${board[1,1]} == X && ${board[0,2]} == X ]]
+   then
+      flag=1
+      echo "-----User won-----"
+      break
+	elif [[ ${board[0,2]} == X && ${board[1,1]} == X && ${board[2,0]} == X  ]]
+   then
+      flag=1
+      echo "-----User won-----"
+      break
+	elif [[ ${board[2,0]} == X && ${board[0,2]} == X && ${board[1,1]} == X  ]]
+   then
+      flag=1
+      echo "-----User won-----"
+      break
+fi
+done
 }
 #FUNCTION FOR CHECKING TURN AND CHECKING WIN
 function term()
