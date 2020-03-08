@@ -81,20 +81,22 @@ function choose()
 		echo "Wrong choice"
 	esac
 }
-#COMPUTER PLAY LIKE ME
+#CHECKS WHEATHER CORNERS ARE AVAILABLE OR NOT
 function choosecpu()
 {
-	for (( index=0; index<3; index++ ))
-	do
-		for (( index1=0; index1<3; index1++ ))
-		do
-			if [[ ${board[$index,$index1]} != X && ${board[$index,$index2]} != O ]]
-			then
-				board[$index,$index1]=O
-				index=4
-			fi
-		done
-	done
+	if [[ ${board[0,2]} != O && ${board[0,2]} != X ]]
+	then
+		board[0,2]=O
+	elif [[ ${board[2,0]} != O && ${board[2,0]} != X ]]
+	then
+		board[2,0]=O
+	elif [[ ${board[2,2]} != O && ${board[2,2]} != X ]]
+	then
+		board[2,2]=O
+	elif [[ ${board[0,0]} != O && ${board[0,0]} != X ]]
+	then
+		board[0,0]=O
+	fi
 }
 #CHECKS WHEATHER PLAYER WIN AND THEN PLAY THAT MOVE
 function checkWin()
