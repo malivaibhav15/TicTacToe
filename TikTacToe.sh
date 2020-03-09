@@ -9,39 +9,40 @@ terms=1
 flagSet=0
 flag=0
 #RESETTING THE BOARD
-function resettingTheBoard()
+resettingTheBoard()
 {
-	for (( index=1; index<=$ROWS; index++ ))
+	for (( index=0; index<$ROWS; index++ ))
 	do
-		for (( index2=1; index2<=$COLUMNS; index2++ ))
+		for (( index2=0; index2<$COLUMNS; index2++ ))
 		do
-			board[ $ROWS,$COLUMNS ]=" "
+			board[ $ROWS,$COLUMNS ]="-"
 		done
 	done
 }
+resettingTheBoard
 #FUNCTION TO DISPLAY BOARD
-function displayBoard()
+displayBoard()
 {
 	for((index=0;index<$ROWS;index++))
 	do
 		echo "----------------"
 		for(( index1=0; index1<$COLUMNS; index1++))
 		do
-			echo -n "|" ${board[$ROWS,$COLUMNS]} "" "|"
+			echo -n "|" ${board[$index,$index1]} "" "|"
 		done
 		echo
 	done
 	echo "----------------"
 }
-
 #FUNCTION FOR ASSIGNING THE LETTER
-function assignLetter()
+assignLetter()
 {
 	echo "Player assigned letter X"
 	echo "Computer assigned letter O"
 }
+assignLetter
 #FUNCTION TO CHECK WHO PLAY FIRST
-function whoPlayFirst()
+whoPlayFirst()
 {
 	play=$(( $RANDOM % 2 ))
 	if [[ $play -eq 0 ]]
@@ -50,15 +51,16 @@ function whoPlayFirst()
 		player=user
 		echo "$player won the toss and elected to play first"
 	else
-		player=computer
+		player=Computer
 		condition=1
 		echo "$player won the toss and elected to play first"
 	fi
 }
+#whoPlayFirst
 #FUNCTION FOR DECIDING THE CELL NUMBER
-function choose()
+choose()
 {
-	read -p "Enter your choice=" choice
+	read -p "enter your choice=" choice
 	case $choice in
 	1)
 		board[0,0]=X;;
@@ -83,9 +85,13 @@ function choose()
 	esac
 }
 #CHECKS WHEATHER CORNERS ARE AVAILABLE OR NOT
-function choosecpu()
+choosecpu()
 {
-	if [[ ${board[0,2]} != O && ${board[0,2]} != X ]]
+#CHECKS WHEATHER CENTER IS AVAILABLE OR NOT
+	if [[ ${board[1,1]} != O && ${board[1,1]} != X ]]
+	then
+		board[1,1]=O
+	elif [[ ${board[0,2]} != O && ${board[0,2]} != X ]]
 	then
 		board[0,2]=O
 	elif [[ ${board[2,0]} != O && ${board[2,0]} != X ]]
@@ -97,43 +103,55 @@ function choosecpu()
 	elif [[ ${board[0,0]} != O && ${board[0,0]} != X ]]
 	then
 		board[0,0]=O
+	elif [[ ${board[0,1]} != O && ${board[0,1]} != X ]]
+	then
+		board[0,1]=O
+	elif [[ ${board[1,2]} != O && ${board[1,2]} != X ]]
+	then
+		board[1,2]=O
+	elif [[ ${board[1,0]} != O && ${board[1,0]} != X ]]
+	then
+		board[1,0]=O
+	elif [[ ${board[2,1]} != O && ${board[2,1]} != X ]]
+	then
+		board[2,1]=O
 	fi
 }
-#CHECKS WHEATHER PLAYER WIN AND THEN PLAY THAT MOVE
-function checkWin()
+#CHECK IF PLAYER CAN WIN,IF HE WINS THEN PLAY THAT MOVE
+checkwin()
 {
 	flagSet=0
-	for((counter=0;counter<3;counter++))
+	for((index=0;index<3;index++))
 	do
-		if [[ ${board[$counter,0]} == O && ${board[$counter,1]} == O && ${board[$counter,2]} != X ]]
+		if [[ ${board[$index,0]} == O && ${board[$index,1]} == O && ${board[$index,2]} != X ]]
 		then
 			flagSet=1
-			board[$counter,2]=O
+			board[$index,2]=O
 			break
-		elif [[ ${board[$counter,1]} == O && ${board[$counter,2]} == O && ${board[$counter,0]} != X ]]
+		elif [[ ${board[$index,1]} == O && ${board[$index,2]} == O && ${board[$index,0]} != X ]]
 		then
 			flagSet=1
-			board[$counter,0]=O
+			board[$index,0]=O
 			break
-		elif [[ ${board[$counter,2]} == O && ${board[$counter,0]} == O && ${board[$counter,1]} != X ]]
+		elif [[ ${board[$index,2]} == O && ${board[$index,0]} == O && ${board[$index,1]} != X ]]
 		then
 			flagSet=1
-			board[$counter,1]=O
+			board[$index,1]=O
 			break
-		elif [[ ${board[0,$counter]} == O && ${board[1,$counter]} == O && ${board[2,$counter]} != X ]]
+		elif [[ ${board[0,$index]} == O && ${board[1,$index]} == O && ${board[2,$index]} != X ]]
 		then
 			flagSet=1
-			board[2,$counter]=O
+			board[2,$index]=O
 			break
-		elif [[ ${board[1,$counter]} == O && ${board[2,$counter]} == O && ${board[0,$counter]} != X ]]
+		elif [[ ${board[1,$index]} == O && ${board[2,$index]} == O && ${board[0,$index]} != X ]]
 		then
 			flagSet=1
-			board[0,$counter]=O
+			board[0,$index]=O
 			break
-		elif [[ ${board[2,$counter$]} == O && ${board[0,$counter]} == O && ${board[1,$counter]} != X ]]
+		elif [[ ${board[2,$index]} == O && ${board[0,$index]} == O && ${board[1,$index]} != X ]]
 		then
 			flagSet=1
-			board[1,$counter]=O
+			board[1,$index]=O
 			break
 		elif [[ ${board[0,0]} == O && ${board[1,1]} == O && ${board[2,2]} != X ]]
 		then
@@ -145,7 +163,7 @@ function checkWin()
 			flagSet=1
 			board[1,1]=O
 			break
-		elif [[ ${board[2,2] } == O && ${board[1,1]} == O && ${board[0,0]} != X ]]
+		elif [[ ${board[2,2]} == O && ${board[1,1]} == O && ${board[0,0]} != X ]]
 		then
 			flagSet=1
 			board[2,2]=O
@@ -165,36 +183,36 @@ function checkWin()
 			flagSet=1
 			board[1,1]=O
 			break
-#CHECKS WHEATHER OPPONENT WINS IF SO THEN PLAYER WILL BLOCK IT
-		elif [[ ${board[$counter,0]} == X && ${board[$counter,1]} == X && ${board[$counter,2]} != O ]]
+#CHECK IF OPPONENT CAN WIN THEN PLAY TO BLOCK
+		elif [[ ${board[$index,0]} == X && ${board[$index,1]} == X && ${board[$index,2]} != O ]]
 		then
 			flagSet=1
-			board[$counter,2]=O
+			board[$index,2]=O
 			break
-		elif [[ ${board[$counter,1]} == X && ${board[$counter,2]} == X && ${board[$counter,0]} != O ]]
+		elif [[ ${board[$index,1]} == X && ${board[$index,2]} == X && ${board[$index,0]} != O ]]
 		then
 			flagSet=1
-			board[$counter,0]=O
+			board[$index,0]=O
 			break
-		elif [[ ${board[$counter,2]} == X && ${board[$counter,0]} == X && ${board[$counter,1]} != O ]]
+		elif [[ ${board[$index,2]} == X && ${board[$index,0]} == X && ${board[$index,1]} != O ]]
 		then
 			flagSet=1
-			board[$counter,1]=O
+			board[$index,1]=O
 			break
-		elif [[ ${board[0,$counter]} == X && ${board[1,$counter]} == X && ${board[2,$counter]} != O ]]
+		elif [[ ${board[0,$index]} == X && ${board[1,$index]} == X && ${board[2,$index]} != O ]]
 		then
 			flagSet=1
-			board[2,$counter]=O
+			board[2,$index]=O
 			break
-		elif [[ ${board[1,$counter]} == X && ${board[2,$counter]} == X && ${board[0,$counter]} != O ]]
+		elif [[ ${board[1,$index]} == X && ${board[2,$index]} == X && ${board[0,$index]} != O ]]
 		then
 			flagSet=1
-			board[0,$counter]=O
+			board[0,$index]=O
 			break
-		elif [[ ${board[2,$counter]} == X && ${board[0,$counter]} == X && ${board[1,$counter]} != O ]]
+		elif [[ ${board[2,$index]} == X && ${board[0,$index]} == X && ${board[1,$index]} != O ]]
 		then
 			flagSet=1
-			board[1,$counter]=O
+			board[1,$index]=O
 			break
 		elif [[ ${board[0,0]} == X && ${board[1,1]} == X && ${board[2,2]} != O ]]
 		then
@@ -229,152 +247,165 @@ function checkWin()
 		fi
 	done
 }
- function winner()
+#DISPLAY THE WINNER
+winner()
 {
 	flag=0
 	for((index=0;index<3;index++))
 	do
 		if [[ ${board[$index,0]} == O && ${board[$index,1]} == O && ${board[$index,2]} == O ]]
-	then
-		flag=1
-		echo "-----Computer won-----"
-		break
-	elif [[ ${board[$k,1]} == O && ${board[$k,2]} == O && ${board[$k,0]} == O ]]
-	then
-		flag=1
-		echo "-----cpu won-----"
-		break
-	elif [[ ${board[$k,2]} == O && ${board[$k,0]} == O && ${board[$k,1]} == O ]]
-	then
-		flag=1
-		echo "-----cpu won-----"
-		break
-	elif [[ ${board[0,$k]} == O && ${board[1,$k]} == O && ${board[2,$k]} == O ]]
-	then
-		flag=1
-		echo "-----cpu won-----"
-		break
-	elif [[ ${board[1,$k]} == O && ${board[2,$k]} == O && ${board[0,$k]} == O ]]
-	then
-		flag=1
-		echo "-----cpu won-----"
-		break
-	elif [[ ${board[2,$k]} == O && ${board[0,$k]} == O && ${board[1,$k]} == O ]]
-	then
-		flag=1
-		echo "-----cpu won-----"
-		break
-	elif [[ ${board[0,0]} == O && ${board[1,1]} == O && ${board[2,2]} == O ]]
-	then
-		flag=1
-		echo "-----cpu won-----"
-		break
-	elif [[ ${board[0,0]} == O && ${board[2,2]} == O && ${board[1,1]} == O ]]
-	then
-		flag=1
-		echo "-----cpu won-----"
-		break
-	elif [[ ${board[2,2]} == O && ${board[1,1]} == O && ${board[0,0]} == O ]]
-	then
-		flag=1
-		echo "-----cpu won-----"
-      break
-	elif [[ ${board[2,0]} == O && ${board[1,1]} == O && ${board[0,2]} == O ]]
-   then
-      flag=1
-      echo "-----cpu won-----"
-      break
-	elif [[ ${board[0,2]} == O && ${board[1,1]} == O && ${board[2,0]} == O ]]
-   then
-      flag=1
-      echo "-----cpu won-----"
-      break
-	elif [[ ${board[2,0]} == O && ${board[0,2]} == O && ${board[1,1]} == O ]]
-   then
-      flag=1
-      echo "-----cpu won-----"
-      break
-	elif [[ ${board[$k,0]} == X && ${board[$k,1]} == X && ${board[$k,2]} == X ]]
-	then
-      flag=1
-		echo "-----User won-----"
-		break
-   elif [[ ${board[$k,1]} == X && ${board[$k,2]} == X && ${board[$k,0]} == X  ]]
-   then
-      flag=1
-      echo "-----User won-----"
-      break
-	elif [[ ${board[$k,2]} == X && ${board[$k,0]} == X && ${board[$k,1]} == X  ]]
-   then
-      flag=1
-      echo "------User won-----"
-      break
-	elif [[ ${board[0,$k]} == X && ${board[1,$k]} == X && ${board[2,$k]} == X  ]]
-   then
-		flag=1
-     echo "-----User won-----"
-      break
-	elif [[ ${board[1,$k]} == X && ${board[2,$k]} == X && ${board[0,$k]} == X  ]]
-   then
-      flag=1
-      echo "-----User won-----"
-      break
-	elif [[ ${board[2,$k]} == X && ${board[0,$k]} == X && ${board[1,$k]} == X  ]]
-   then
-      flag=1
-      echo "-----User won-----"
-      break
-	elif [[ ${board[0,0]} == X && ${board[1,1]} == X && ${board[2,2]} == X  ]]
-   then
-      flag=1
-      echo "-----User won-----"
-      break
-	elif [[ ${board[0,0]} == X && ${board[2,2]} == X && ${board[1,1]} == X  ]]
-   then
-      flag=1
-      echo "-----User won-----"
-      break
-	elif [[ ${board[2,2]} == X && ${board[1,1]} == X && ${board[0,0]} == X  ]]
-   then
-      flag=1
-      echo "-----User won-----"
-      break
-	elif [[ ${board[2,0]} == X && ${board[1,1]} == X && ${board[0,2]} == X ]]
-   then
-      flag=1
-      echo "-----User won-----"
-      break
-	elif [[ ${board[0,2]} == X && ${board[1,1]} == X && ${board[2,0]} == X  ]]
-   then
-      flag=1
-      echo "-----User won-----"
-      break
-	elif [[ ${board[2,0]} == X && ${board[0,2]} == X && ${board[1,1]} == X  ]]
-   then
-      flag=1
-      echo "-----User won-----"
-      break
-fi
-done
+		then
+			flag=1
+			echo "-----Computer won-----"
+			break
+		elif [[ ${board[$index,1]} == O && ${board[$index,2]} == O && ${board[$index,0]} == O ]]
+		then
+			flag=1
+			echo "-----Computer won-----"
+			break
+		elif [[ ${board[$index,2]} == O && ${board[$index,0]} == O && ${board[$index,1]} == O ]]
+		then
+			flag=1
+			echo "-----Computer won-----"
+			break
+		elif [[ ${board[0,$index]} == O && ${board[1,$index]} == O && ${board[2,$index]} == O ]]
+		then
+			flag=1
+			echo "-----Computer won-----"
+			break
+		elif [[ ${board[1,$index]} == O && ${board[2,$index]} == O && ${board[0,$index]} == O ]]
+		then
+			flag=1
+			echo "-----Computer won-----"
+			break
+		elif [[ ${board[2,$index]} == O && ${board[0,$index]} == O && ${board[1,$index]} == O ]]
+		then
+			flag=1
+			echo "-----Computer won-----"
+			break
+		elif [[ ${board[0,0]} == O && ${board[1,1]} == O && ${board[2,2]} == O ]]
+		then
+			flag=1
+			echo "-----Computer won-----"
+			break
+		elif [[ ${board[0,0]} == O && ${board[2,2]} == O && ${board[1,1]} == O ]]
+		then
+			flag=1
+			echo "-----Computer won-----"
+			break
+		elif [[ ${board[2,2]} == O && ${board[1,1]} == O && ${board[0,0]} == O ]]
+		then
+			flag=1
+			echo "-----Computer won-----"
+			break
+		elif [[ ${board[2,0]} == O && ${board[1,1]} == O && ${board[0,2]} == O ]]
+		then
+			flag=1
+			echo "-----Computer won-----"
+			break
+		elif [[ ${board[0,2]} == O && ${board[1,1]} == O && ${board[2,0]} == O ]]
+		then
+			flag=1
+			echo "-----Computer won-----"
+			break
+		elif [[ ${board[2,0]} == O && ${board[0,2]} == O && ${board[1,1]} == O ]]
+		then
+			flag=1
+			echo "-----Computer won-----"
+			break
+		elif [[ ${board[$index,0]} == X && ${board[$index,1]} == X && ${board[$index,2]} == X ]]
+		then
+			flag=1
+			echo "-----Player won-----"
+			break
+		elif [[ ${board[$index,1]} == X && ${board[$index,2]} == X && ${board[$index,0]} == X  ]]
+		then
+			flag=1
+			echo "-----Player won-----"
+			break
+		elif [[ ${board[$index,2]} == X && ${board[$index,0]} == X && ${board[$index,1]} == X  ]]
+		then
+			flag=1
+			echo "------Player won-----"
+			break
+		elif [[ ${board[0,$index]} == X && ${board[1,$index]} == X && ${board[2,$index]} == X  ]]
+		then
+			flag=1
+			echo "-----Player won-----"
+			break
+		elif [[ ${board[1,$index]} == X && ${board[2,$index]} == X && ${board[0,$index]} == X  ]]
+		then
+			flag=1
+			echo "-----Player won-----"
+			break
+		elif [[ ${board[2,$index]} == X && ${board[0,$index]} == X && ${board[1,$index]} == X  ]]
+		then
+			flag=1
+			echo "-----Player won-----"
+			break
+		elif [[ ${board[0,0]} == X && ${board[1,1]} == X && ${board[2,2]} == X  ]]
+		then
+			flag=1
+			echo "-----Player won-----"
+			break
+		elif [[ ${board[0,0]} == X && ${board[2,2]} == X && ${board[1,1]} == X  ]]
+		then
+			flag=1
+			echo "-----Player won-----"
+			break
+		elif [[ ${board[2,2]} == X && ${board[1,1]} == X && ${board[0,0]} == X  ]]
+		then
+			flag=1
+			echo "-----Player won-----"
+			break
+		elif [[ ${board[2,0]} == X && ${board[1,1]} == X && ${board[0,2]} == X ]]
+		then
+			flag=1
+			echo "-----Player won-----"
+			break
+		elif [[ ${board[0,2]} == X && ${board[1,1]} == X && ${board[2,0]} == X  ]]
+		then
+			flag=1
+			echo "-----Player won-----"
+			break
+		elif [[ ${board[2,0]} == X && ${board[0,2]} == X && ${board[1,1]} == X  ]]
+		then
+			flag=1
+			echo "-----Player won-----"
+			break
+		fi
+	done
 }
-#FUNCTION FOR CHECKING TURN AND CHECKING WIN
-function term()
+#FUNCTION FOR CHANGING THE TURN AND CHECKING THE WIN
+term()
 {
+	whoPlayFirst
+	displayBoard
 	condition=2
-	while [[ $terms -le 9 ]]
+	while [[ $terms -le 9 && $flag -ne 1 ]]
 	do
 		if [[ $(($condition % 2)) -eq 0 ]]
 		then
 			echo "Player is playing"
 			choose
+			winner
 			displayBoard
 		else
-			echo "Computer is playing his move"
-			choosecpu
+			echo "Computer is playing"
+			checkwin
+			winner
+			if [[ $flag -eq 0 && $flagSet -eq 0 ]]
+			then
+				choosecpu
+			fi
 			displayBoard
 		fi
 		((condition++))
 		((terms++))
 	done
+	if  [[ $flag -eq 0 ]]
+	then
+		echo "-----GAME OVER-----"
+	fi
 }
 term
